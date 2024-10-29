@@ -9,6 +9,7 @@ import javax.swing.JTable;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -182,18 +183,23 @@ public class MasterBarang extends JPanel{
 			public void actionPerformed(ActionEvent arg0) {
 				DefaultTableModel tb = (DefaultTableModel) table.getModel();
 				String id = null,kategori = null,nama = null,harga = null,satuan = null;
+				String kategorisub,satuansub;
+				
 				id = MasterBarang.this.id.getText();
-				kategori = MasterBarang.this.kategori.getSelectedItem().toString().substring(0,1);
+				kategori = MasterBarang.this.kategori.getSelectedItem().toString();
 				nama = MasterBarang.this.nama.getText();
 				harga = MasterBarang.this.harga.getText();
-				satuan = MasterBarang.this.csatuan.getSelectedItem().toString().substring(0,1);
+				satuan = MasterBarang.this.csatuan.getSelectedItem().toString();
+				
+				kategorisub = kategori.substring(0,kategori.indexOf("."));
+				satuansub = satuan.substring(0,satuan.indexOf("."));
 				
 				if (id.equals("")||nama.equals("")||harga.equals("")) {
 					JOptionPane.showMessageDialog(null, "ada yang belum diisi");
 				}else if(id.trim().isEmpty()||nama.trim().isEmpty()||harga.trim().isEmpty()){
 					JOptionPane.showMessageDialog(null, "ada yang belum diisi");
 				}else {
-					String[] rowdata = { id, kategori, nama, harga, satuan };
+					String[] rowdata = { id, kategorisub, nama, harga, satuansub };
 					tb.addRow(rowdata);
 					settext();
 				}
@@ -220,7 +226,24 @@ public class MasterBarang extends JPanel{
 		btnSimpan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DefaultTableModel tb = (DefaultTableModel) table.getModel();
-				
+				String query = queries.gquery("query_name", "q_insert_master_barang");
+				try {
+					Class.forName(vars.Driver());
+					Connection con = DriverManager.getConnection(vars.url(), vars.userpass(), vars.userpass());
+					PreparedStatement prep = con.prepareStatement(query);
+					for (int i = 0; i < tb.getRowCount(); i++) {
+						prep.setInt(1, Integer.parseInt((String) tb.getValueAt(i, 0)));
+						prep.setInt(2, Integer.parseInt((String) tb.getValueAt(i, 1)));
+						prep.setString(3, (String) tb.getValueAt(i, 2));
+						prep.setInt(4, Integer.parseInt((String) tb.getValueAt(i, 3)));
+						prep.setInt(5, Integer.parseInt((String) tb.getValueAt(i, 4)));
+						prep.addBatch();
+					}
+					prep.executeBatch();
+					JOptionPane.showMessageDialog(null, "ok");
+				} catch (Exception e2) {
+					JOptionPane.showMessageDialog(null, e2);
+				}
 			}
 		});
 	}

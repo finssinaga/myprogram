@@ -68,7 +68,6 @@ public class vars {
 			cn[i]=resmd.getColumnName(i+1);
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return cn;
