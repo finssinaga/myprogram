@@ -6,23 +6,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.JButton;
 import javax.swing.JTable;
-import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
-import java.awt.SystemColor;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 import java.awt.Component;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 import java.sql.Statement;
-import java.awt.Dimension;
-import javax.swing.JMenu;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.Box;
@@ -79,11 +69,11 @@ public class list extends JPanel{
 	}
 	private void getlistpc() {
 		
-		String query = "select * from list";
+		String query = queries.gquery("query_name", "q_select_list");
 		String no,ip,mac;
 		try {
 			DefaultTableModel tb = (DefaultTableModel)table.getModel();
-			Class.forName("com.mysql.cj.jdbc.Driver");
+			Class.forName(vars.Driver());
 			Connection con = DriverManager.getConnection(vars.url(),vars.userpass(),vars.userpass());
 			Statement stat = con.createStatement();
 			ResultSet res = stat.executeQuery(query);

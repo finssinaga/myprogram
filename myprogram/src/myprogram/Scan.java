@@ -123,10 +123,10 @@ public class Scan extends JPanel{
 	private void save() {
 		DefaultTableModel tb = (DefaultTableModel)table.getModel();
 		String no,hostname,ip;
-		String query = "insert into list (`no`,`hostname`,`ip_address`) values (?,?,?)";
+		String query = queries.gquery("query_name", "q_insert_scan");
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://192.168.0.69:3306/pclist", "pclist", "pclist");
+			Class.forName(vars.Driver());
+			Connection con = DriverManager.getConnection(vars.url(),vars.userpass(),vars.userpass());
 			for (int i = 1; i < tb.getRowCount(); i++) {
 				no = tb.getValueAt(i, 0).toString();
 				hostname = tb.getValueAt(i, 1).toString();

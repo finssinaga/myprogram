@@ -70,6 +70,18 @@ public class Main extends JFrame {
 		
 		mnListPc.add(mntmScanIp);
 		
+		JMenu mnTransaksi = new JMenu("Transaksi");
+		menuBar.add(mnTransaksi);
+		
+		JMenuItem mntmMasterBarang = new JMenuItem("Master barang");
+		mntmMasterBarang.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JPanel master = new MasterBarang(Main.this);
+				panel(master);
+			}
+		});
+		mnTransaksi.add(mntmMasterBarang);
+		
 		JMenu mnCmd = new JMenu("CMD");
 		menuBar.add(mnCmd);
 		

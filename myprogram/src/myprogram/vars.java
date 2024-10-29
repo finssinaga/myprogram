@@ -74,4 +74,21 @@ public class vars {
 		return cn;
 	}
 	
+	public static int sqlGetRowCount(String query) {
+		int roc=0;
+		try {
+			Class.forName(Driver());
+			Connection con = DriverManager.getConnection(url(),userpass(),userpass());
+			Statement stat = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+			String qu = query;
+			ResultSet res = stat.executeQuery(qu);
+			res.last();
+			roc=res.getRow();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return roc;
+		
+	}
+	
 }
