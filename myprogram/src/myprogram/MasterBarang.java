@@ -167,8 +167,8 @@ public class MasterBarang extends JPanel{
 		
 		btnTambah.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				setcombmodel(kategori, queries.gquery("query_name", "c_kategori_model"));
-				setcombmodel(csatuan, queries.gquery("query_name", "c_satuan_model"));
+				vars.setcomboboxmodel(kategori, queries.gquery("query_name", "c_kategori_model"));
+				vars.setcomboboxmodel(csatuan, queries.gquery("query_name", "c_satuan_model"));
 				DefaultTableModel tb = (DefaultTableModel) table.getModel();
 				if(tb.getColumnCount()==0) {
 					splitpane();
@@ -244,6 +244,7 @@ public class MasterBarang extends JPanel{
 				} catch (Exception e2) {
 					JOptionPane.showMessageDialog(null, e2);
 				}
+				tb.setRowCount(0);
 			}
 		});
 	}
@@ -286,21 +287,6 @@ public class MasterBarang extends JPanel{
 				
 			}
 		}
-	}
-	private void setcombmodel(JComboBox<String> c, String query) {
-
-		try {
-			Class.forName(vars.Driver());
-			Connection con = DriverManager.getConnection(vars.url(), vars.userpass(), vars.userpass());
-			Statement stat = con.createStatement();
-			ResultSet res = stat.executeQuery(query);
-			while (res.next()) {
-				c.addItem(res.getString(1));
-			} 
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, e);
-		}
-		
 	}
 
 }

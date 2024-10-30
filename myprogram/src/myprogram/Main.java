@@ -82,6 +82,18 @@ public class Main extends JFrame {
 		});
 		mnTransaksi.add(mntmMasterBarang);
 		
+		JMenuItem mntmPenjualan = new JMenuItem("Penjualan");
+		mnTransaksi.add(mntmPenjualan);
+		
+		JMenuItem mntmStok = new JMenuItem("Stok");
+		mntmStok.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JPanel p = new stok();
+				panel(p);
+			}
+		});
+		mnTransaksi.add(mntmStok);
+		
 		JMenu mnCmd = new JMenu("CMD");
 		menuBar.add(mnCmd);
 		

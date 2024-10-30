@@ -6,11 +6,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.Properties;
 
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 public class vars {
@@ -88,6 +90,52 @@ public class vars {
 		}
 		return roc;
 		
+	}
+	public static void setcomboboxmodel(JComboBox<String> c, String query) {
+
+		try {
+			Class.forName(vars.Driver());
+			Connection con = DriverManager.getConnection(vars.url(), vars.userpass(), vars.userpass());
+			Statement stat = con.createStatement();
+			ResultSet res = stat.executeQuery(query);
+			while (res.next()) {
+				c.addItem(res.getString(1));
+			} 
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e);
+		}
+		
+	}
+	
+	public static void insertdata(String[] data, String query) {
+		//1 array , 1 row, 1 execute
+		try {
+			Class.forName(Driver());
+			Connection con = DriverManager.getConnection(url(), userpass(), userpass());
+			PreparedStatement prep = con.prepareStatement(query);
+			for (int i = 0; i < data.length; i++) {
+					prep.setObject(i+1, data[i]);
+			}
+			prep.execute();
+			JOptionPane.showMessageDialog(null, "ok");
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e+"\n query : "+query);
+		}
+	}
+	public static String getsinglerow(String query) {
+		String data= null;
+		try {
+			Class.forName(Driver());
+			Connection con = DriverManager.getConnection(url(), userpass(), userpass());
+			Statement stat = con.createStatement();
+			ResultSet res = stat.executeQuery(query);
+			while (res.next()) {
+				data=res.getString(1);
+			} 
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e);
+		}
+		return data;
 	}
 	
 }
