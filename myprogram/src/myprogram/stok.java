@@ -16,10 +16,17 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Component;
+import java.awt.Container;
+import java.awt.EventQueue;
+
 import javax.swing.Box;
+import java.awt.Font;
+import java.awt.Color;
 
 public class stok extends JPanel{
 	private JTextField in_stok;
@@ -36,9 +43,10 @@ public class stok extends JPanel{
 	private JComboBox op_kategori;
 	private JComboBox op_nama;
 	private JTextField op_jumlah;
+	private JToolBar toolBar_1;
+	private JToolBar toolBar_4;
 	public stok() {
 		setLayout(new BorderLayout(0, 0));
-		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		add(tabbedPane, BorderLayout.CENTER);
 		
@@ -78,7 +86,7 @@ public class stok extends JPanel{
 		op_table = new JTable();
 		scrollPane.setViewportView(op_table);
 		
-		JToolBar toolBar_4 = new JToolBar();
+		toolBar_4 = new JToolBar();
 		toolBar_4.setOrientation(SwingConstants.VERTICAL);
 		toolBar_4.setFloatable(false);
 		splitPane.setLeftComponent(toolBar_4);
@@ -120,7 +128,7 @@ public class stok extends JPanel{
 		splitPane_4.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		panel_1.add(splitPane_4, BorderLayout.CENTER);
 		
-		JToolBar toolBar_1 = new JToolBar();
+		toolBar_1 = new JToolBar();
 		splitPane_4.setLeftComponent(toolBar_1);
 		toolBar_1.setOrientation(SwingConstants.VERTICAL);
 		toolBar_1.setFloatable(false);
@@ -193,19 +201,19 @@ public class stok extends JPanel{
 		add(toolBar_3, BorderLayout.NORTH);
 		
 		JLabel lblFormStokBarang = new JLabel("Form Stok Barang");
+		lblFormStokBarang.setFont(new Font("Tahoma", Font.BOLD, 18));
 		toolBar_3.add(lblFormStokBarang);
 		
 		Component horizontalGlue = Box.createHorizontalGlue();
 		toolBar_3.add(horizontalGlue);
 		
-		JButton btnX = new JButton("X");
+		JButton btnX = new JButton("   X  ");
+		btnX.setBackground(new Color(255, 0, 0));
 		toolBar_3.add(btnX);
 		
 		in_tambah.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				DefaultTableModel tb = (DefaultTableModel) in_table.getModel();
-				vars.setcomboboxmodel(in_kategori, queries.gquery("query_name", "c_kategori_model"));
-				tb.setColumnIdentifiers(vars.sqlGetColumn(queries.gquery("query_name", "q_stok_barang")));
+				
 			}
 		});
 		btnInput.addActionListener(new ActionListener() {
@@ -214,7 +222,7 @@ public class stok extends JPanel{
 				String stok = in_stok.getText().toString();
 				String kategori = in_kategori.getSelectedItem().toString(),
 						nama = in_nama.getSelectedItem().toString(),
-						id=vars.getsinglerow("select id from master_barang where nama='"+nama+"'");
+						id=vars.getsinglestring("select id from master_barang where nama='"+nama+"'");
 				String subkategori = kategori.substring(0,kategori.indexOf("."));
 				if (stok.equals("") ||kategori.equals("")||nama.equals("")){
 					JOptionPane.showMessageDialog(null, "nilai tidak boleh 0 / ada yang belum diisi");
@@ -239,9 +247,7 @@ public class stok extends JPanel{
 		});
 		op_tambah.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DefaultTableModel tb = (DefaultTableModel) op_table.getModel();
-				vars.setcomboboxmodel(op_kategori, queries.gquery("query_name", "c_kategori_model"));
-				tb.setColumnIdentifiers(vars.sqlGetColumn(queries.gquery("query_name", "q_stok_barang")));
+				
 			}
 		});
 		op_kategori.addActionListener(new ActionListener() {
@@ -257,7 +263,7 @@ public class stok extends JPanel{
 				String stok = op_jumlah.getText().toString();
 				String kategori = op_kategori.getSelectedItem().toString(),
 						nama = op_nama.getSelectedItem().toString(),
-						id=vars.getsinglerow("select id from master_barang where nama='"+nama+"'");
+						id=vars.getsinglestring("select id from master_barang where nama='"+nama+"'");
 				String subkategori = kategori.substring(0,kategori.indexOf("."));
 				if (stok.equals("") ||kategori.equals("")||nama.equals("")){
 					JOptionPane.showMessageDialog(null, "nilai tidak boleh 0 / ada yang belum diisi");
@@ -282,6 +288,34 @@ public class stok extends JPanel{
 				
 			}
 		});
+		setlayout();
+	}
+	private void setlayout() {
+		EventQueue.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				setdivider(toolBar_1);
+				setdivider(toolBar_4);
+				
+				DefaultTableModel tb = (DefaultTableModel) op_table.getModel();
+				vars.setcomboboxmodel(op_kategori, queries.gquery("query_name", "c_kategori_model"));
+				tb.setColumnIdentifiers(vars.sqlGetColumn(queries.gquery("query_name", "q_stok_barang")));
+				
+				DefaultTableModel tx = (DefaultTableModel) in_table.getModel();
+				vars.setcomboboxmodel(in_kategori, queries.gquery("query_name", "c_kategori_model"));
+				tx.setColumnIdentifiers(vars.sqlGetColumn(queries.gquery("query_name", "q_stok_barang")));
+			}
+		});
+	}
+	private void setdivider(Container container) {
+		Component[] co = container.getComponents();
+		for(Component c : co) {
+			if(c instanceof JSplitPane) {
+				((JSplitPane) c).setDividerLocation(c.getSize().width/12);
+				((JSplitPane) c).setDividerSize(1);
+			}
+		}
 	}
 
 }

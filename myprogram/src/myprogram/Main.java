@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 
 import javafx.scene.layout.Border;
 import javafx.stage.WindowEvent;
+import penjualan.MainPJ;
 
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -83,6 +84,12 @@ public class Main extends JFrame {
 		mnTransaksi.add(mntmMasterBarang);
 		
 		JMenuItem mntmPenjualan = new JMenuItem("Penjualan");
+		mntmPenjualan.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				MainPJ.main(null);
+				Main.this.dispose();
+			}
+		});
 		mnTransaksi.add(mntmPenjualan);
 		
 		JMenuItem mntmStok = new JMenuItem("Stok");

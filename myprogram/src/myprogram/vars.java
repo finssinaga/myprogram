@@ -122,7 +122,28 @@ public class vars {
 			JOptionPane.showMessageDialog(null, e+"\n query : "+query);
 		}
 	}
-	public static String getsinglerow(String query) {
+	public static String[] getsinglerow(String query) {
+		String[] data = null;
+		System.out.println(query);
+		try {
+			Class.forName(Driver());
+			Connection con = DriverManager.getConnection(url(), userpass(), userpass());
+			Statement stat = con.createStatement();
+			ResultSet res = stat.executeQuery(query);
+			int row = vars.sqlGetColumn(query).length;
+			data = new String[row];
+			while (res.next()) {
+				for(int i=0;i<row;i++) {
+					data[i]=res.getString(i+1);
+				}
+			} 
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e);
+			e.printStackTrace();
+		}
+		return data;
+	}
+	public static String getsinglestring(String query) {
 		String data= null;
 		try {
 			Class.forName(Driver());
